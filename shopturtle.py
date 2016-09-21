@@ -51,9 +51,9 @@ def listen_for_responses():
 
 def print_options():
   print "Here are the available options:"
-  print "b - Broadcast a command"
+  print "b <command> - Broadcast a command"
   print "l - List connections"
-  print "s - Select a connection"
+  print "s <number> - Select a connection"
 
 if __name__ == '__main__':
   t = Thread(target=listen_for_shells)
@@ -64,7 +64,7 @@ if __name__ == '__main__':
   t.daemon = True
   t.start()
 
-  print "Welcome to Shopturtle."
+  print "Welcome to shopTurtle."
   print_options()
 
   while True:
@@ -78,22 +78,13 @@ if __name__ == '__main__':
 
       break
 
-    if command == "b":
-      try:
-        command = raw_input("Enter a command to broadcast\n")
-      except:
-        sock.close()
-        with lock:
-          for connection in connections:
-            connection.close()
-
-        break
-
+    if command[0:1] == "b":
+      broadcast_command = command[2:]
       with lock:
         for connection in connections:
           try:
-            print "Sending command: '" + command + "' to: " + str(connection.getpeername())
-            connection.sendall(command + '\n')
+            print "Sending command: '" + broadcast_command + "' to: " + str(connection.getpeername())
+            connection.sendall(broadcast_command + '\n')
           except:
             pass
     elif command == "l":
