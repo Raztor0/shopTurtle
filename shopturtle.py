@@ -14,7 +14,7 @@ lock = Lock()
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # Bind the socket to the port
-server_address = ('localhost', 10000)
+server_address = ('0.0.0.0', 10000)
 sock.bind(server_address)
 
 # Listen for incoming connections
@@ -43,8 +43,14 @@ def listen_for_responses():
             sys.stdout.write(data)
             sys.stdout.flush()
           else:
+            print "Data was None. Removing connection."
+            with lock:
+              connections.remove(connection)
             break
         except:
+          print "Exception while recv-ing. Removing connection."
+          with lock:
+            connections.remove(connection)
           break
 
     time.sleep(1)
