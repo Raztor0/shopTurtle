@@ -98,8 +98,12 @@ if __name__ == '__main__':
           except:
             pass
     elif command == "l":
-      for i, connection in enumerate(connections):
-        print "[" + str(i) + "] " + str(connection.getpeername())
+      with lock:
+        if len(connections) == 0:
+          print "There are no active shells"
+        else:
+          for i, connection in enumerate(connections):
+            print "[" + str(i) + "] " + str(connection.getpeername())
 
     elif command[0:1] == "s":
       connection_index = command[2:]
