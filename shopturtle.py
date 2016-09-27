@@ -14,7 +14,7 @@ lock = Lock()
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # Bind the socket to the port
-server_address = ('0.0.0.0', 10000)
+server_address = ('0.0.0.0', 4444)
 sock.bind(server_address)
 
 # Listen for incoming connections
