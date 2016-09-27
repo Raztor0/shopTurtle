@@ -47,11 +47,10 @@ def listen_for_responses():
             with lock:
               connections.remove(connection)
             break
-        except:
-          print "Exception while recv-ing. Removing connection."
-          with lock:
-            connections.remove(connection)
+        except Exception, e:
           break
+
+      print ''
 
     time.sleep(1)
 
@@ -85,6 +84,11 @@ if __name__ == '__main__':
       break
 
     if command[0:1] == "b":
+      if len(command) < 3:
+        print "Broadcast command is missing."
+        print_options()
+        continue
+
       broadcast_command = command[2:]
       with lock:
         for connection in connections:
@@ -107,7 +111,7 @@ if __name__ == '__main__':
         for i, connection in enumerate(connections):
           if i == int(connection_index):
             try:
-              command = raw_input("Enter a command to send to " + str(connection.getpeername()))
+              command = raw_input("Enter a command to send to " + str(connection.getpeername()) + "\n")
             except:
               sock.close()
               with lock:
